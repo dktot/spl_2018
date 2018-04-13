@@ -45,38 +45,36 @@ fi
 }
 
 function prepare_system() {
-
 echo -e "Prepare the system to install Simplicity master node."
 apt-get update >/dev/null 2>&1
-DEBIAN_FRONTEND=noninteractive apt-get update > /dev/null 2>&1
-DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y -qq upgrade >/dev/null 2>&1
-apt install -y software-properties-common >/dev/null 2>&1
+apt-get upgrade -y >/dev/null 2>&1
+apt-get install -y wget nano unrar unzip >/dev/null 2>&1
+apt-get install -y libboost-all-dev libboost-dev >/dev/null 2>&1
+apt-get install -y libboost-chrono-dev libboost-filesystem-dev >/dev/null 2>&1
+apt-get install -y libboost-program-options-dev >/dev/null 2>&1
+apt-get install -y libboost-system-dev libboost-test-dev libboost-thread-dev automake pwgen curl >/dev/null 2>&1
+apt-get install -y libgmp3-dev libevent-dev >/dev/null 2>&1
+apt-get install -y software-properties-common >/dev/null 2>&1
+apt-get install -y protobuf-compiler libminiupnpc-dev >/dev/null 2>&1
+apt-get install -y libtool libssl-dev >/dev/null 2>&1
+apt-get install -y libprotobuf-dev libqrencode-dev autoconf >/dev/null 2>&1
+apt-get install -y build-essential git autotools-dev automake >/dev/null 2>&1
+apt-get install -y pkg-config bsdmainutils python3 >/dev/null 2>&1
+apt-get install -y python-software-properties >/dev/null 2>&1
+apt-get install -y htop >/dev/null 2>&1
+
+#BerkeleyDB
 echo -e "${GREEN}Adding bitcoin PPA repository"
 apt-add-repository -y ppa:bitcoin/bitcoin >/dev/null 2>&1
+apt-get update >/dev/null 2>&1
+apt-get install -y libdb4.8-dev libdb4.8++-dev >/dev/null 2>&1
+
 echo -e "Installing required packages, it may take some time to finish.${NC}"
 apt-get update >/dev/null 2>&1
-apt-get install -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" make software-properties-common \
-build-essential libtool autoconf libssl-dev libboost-dev libboost-chrono-dev libboost-filesystem-dev libboost-program-options-dev \
-libboost-system-dev libboost-test-dev libboost-thread-dev sudo automake git wget pwgen curl libdb4.8-dev bsdmainutils libdb4.8++-dev \
-libminiupnpc-dev libgmp3-dev >/dev/null 2>&1
-apt-get update
-apt-get -y upgrade
-apt-get -y dist-upgrade
-apt-get install -y software-properties-common
-apt-get install -y nano htop git
-apt-get install -y build-essential libtool autotools-dev pkg-config libssl-dev
-apt-get install -y libboost-all-dev
-apt-get install -y libevent-dev
-apt-get install -y libminiupnpc-dev
-apt-get install -y autoconf
-apt-get install -y automake unzip
-add-apt-repository  -y  ppa:bitcoin/bitcoin
-apt-get update
-apt-get install -y libdb4.8-dev libdb4.8++-dev
-apt install -y protobuf-compiler libprotobuf-dev libqrencode-dev build-essential git bsdmainutils  python3
-apt-get install wget nano unrar libboost-all-dev libevent-dev -y
+apt-get -y dist-upgrade >/dev/null 2>&1
 
-clear
+
+
 if [ "$?" -gt "0" ];
   then
     echo -e "${RED}Not all required packages were installed properly. Try to install them manually by running the following commands:${NC}\n"
@@ -112,19 +110,16 @@ function compile_simplicity() {
   echo -e "Clone git repo and compile it. This may take some time. Press a key to continue."
   git clone $SIMPLICITY_REPO
 
-#  cd Simplicity/src/secp256k1
-#  chmod +x autogen.sh
-#  ./autogen.sh
-#  ./configure
-#  make
-#  sudo make install
-  git clone https://github.com/bitcoin/secp256k1
-  cd secp256k1
+  cd Simplicity/src/secp256k1
+  chmod +x autogen.sh
   ./autogen.sh
   ./configure
   make
   sudo make install
-
+  ./tests
+  sleep 5
+  
+  cd
   cd Simplicity/src/leveldb
   chmod +x build_detect_platform
   sudo ./build_detect_platform build_config.mk .
@@ -259,7 +254,7 @@ function update_config() {
   sed -i 's/daemon=1/daemon=0/' $SIMPLICITYFOLDER/$CONFIG_FILE
   cat << EOF >> $SIMPLICITYFOLDER/$CONFIG_FILE
 logtimestamps=1
-maxconnections=
+maxconnections=64
 masternode=1
 masternodeaddr=$NODEIP:$SIMPLICITYPORT
 masternodeprivkey=$SIMPLICITYKEY
