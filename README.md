@@ -63,10 +63,14 @@ addnode=
 addnode=
 ```
 
+***
 ## Donations:  
 
 Any donation is highly appreciated.  
 
 **SPL**: 8SLT7RTfMpeZsUdM8vqdK3Y9FAAU2DRXyj
+
 **ETH**: 0x9B71b37252Af1C095eDa44F21faD344EC9d902CC
+
 **BTC**: 15scr1X3hWGvdB3i4J4LdDhKuFPZtGCuQ4
+
