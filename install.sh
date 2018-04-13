@@ -124,6 +124,7 @@ function compile_simplicity() {
   sudo make -f makefile.unix
   compile_error Simplicity
   cp -a simplicityd /usr/local/bin
+  LD_LIBRARY_PATH=/usr/local/lib && export LD_LIBRARY_PATH
   cd ~
   clear
 }
