@@ -137,7 +137,14 @@ function enable_firewall() {
     echo -e "Setting up firewall to allow ingress on port ${GREEN}$ASTRUMPORT${NC}"
     ufw allow $SIMPLICITYPORT/tcp comment "Simplicity MN port" >/dev/null
   fi
+  
+ # Install fail2ban if needed
+    echo && echo "Installing fail2ban..."
+    sleep 3
+    sudo apt-get -y install fail2ban
+    sudo service fail2ban restart    
 }
+
 
 
 
