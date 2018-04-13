@@ -111,29 +111,30 @@ clear
 function compile_simplicity() {
   echo -e "Clone git repo and compile it. This may take some time. Press a key to continue."
   git clone $SIMPLICITY_REPO
-  cd Simplicity/src/secp256k1
-  chmod +x autogen.sh
+
+#  cd Simplicity/src/secp256k1
+#  chmod +x autogen.sh
+#  ./autogen.sh
+#  ./configure
+#  make
+#  sudo make install
+  git clone https://github.com/bitcoin/secp256k1
+  cd secp256k1
   ./autogen.sh
   ./configure
   make
   sudo make install
-  cd ../leveldb/
+
+  cd Simplicity/src/leveldb
   chmod +x build_detect_platform
   sudo ./build_detect_platform build_config.mk .
   cd ..
   sudo make -f makefile.unix
-  compile_error Simplicity
   cp -a simplicityd /usr/local/bin
   LD_LIBRARY_PATH=/usr/local/lib && export LD_LIBRARY_PATH
   cd ~
   clear
 }
-
-
-
-
-
-
 
 function enable_firewall() {
   FWSTATUS=$(ufw status 2>/dev/null|awk '/^Status:/{print $NF}')
@@ -142,6 +143,8 @@ function enable_firewall() {
     ufw allow $SIMPLICITYPORT/tcp comment "Simplicity MN port" >/dev/null
   fi
 }
+
+
 
 function systemd_simplicity() {
   cat << EOF > /etc/systemd/system/$SIMPLICITYUSER.service
@@ -174,10 +177,12 @@ EOF
   fi
 }
 
+
 function ask_port() {
 read -p "SIMPLICITY Port: " -i $DEFAULTSIMPLICITYPORT -e SIMPLICITYPORT
 : ${SIMPLICITYPORT:=$DEFAULTSIMPLICITYPORT}
 }
+
 
 function ask_user() {
   read -p "Simplicity user: " -i $DEFAULTSIMPLICITYUSER -e SIMPLICITYUSER
@@ -201,6 +206,7 @@ function ask_user() {
   fi
 }
 
+
 function check_port() {
   declare -a PORTS
   PORTS=($(netstat -tnlp | awk '/LISTEN/ {print $4}' | awk -F":" '{print $NF}' | sort | uniq | tr '\r\n'  ' '))
@@ -212,6 +218,8 @@ function check_port() {
     ask_port
   done
 }
+
+
 
 function create_config() {
   RPCUSER=$(pwgen -s 8 1)
