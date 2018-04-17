@@ -126,7 +126,7 @@ function compile_simplicity() {
   echo -e "Clone git repo and compile it. This may take some time. Press a key to continue."
   git clone $SIMPLICITY_REPO
 
-  cd Simplicity-1.2.0.0/src/secp256k1
+  cd Simplicity/src/secp256k1
   chmod +x autogen.sh
   ./autogen.sh
   ./configure
@@ -136,7 +136,7 @@ function compile_simplicity() {
   sleep 5
   
   cd
-  cd Simplicity-1.2.0.0/src/leveldb
+  cd Simplicity/src/leveldb
   chmod +x build_detect_platform
   sudo ./build_detect_platform build_config.mk .
   cd ..
