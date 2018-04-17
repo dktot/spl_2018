@@ -3,7 +3,7 @@
 TMP_FOLDER=$(mktemp -d)
 CONFIG_FILE="simplicity.conf"
 SIMPLICITY_DAEMON="/usr/local/bin/simplicityd"
-SIMPLICITY_REPO="https://github.com/ComputerCraftr/Simplicity"
+SIMPLICITY_REPO="https://github.com/ComputerCraftr/Simplicity/releases/tag/v1.2.0.0"
 DEFAULTSIMPLICITYPORT=11957
 DEFAULTSIMPLICITYUSER="simplicity"
 NODEIP=$(curl -s4 icanhazip.com)
