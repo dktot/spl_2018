@@ -149,6 +149,40 @@ function compile_simplicity() {
 }
 
 
+
+
+function systemd_simplicity() {
+  cat << EOF > /etc/systemd/system/$SIMPLICITYUSER.service
+[Unit]
+Description=Simplicity service
+After=network.target
+
+[Service]
+ExecStart=$SIMPLICITY_DAEMON -conf=$SIMPLICITYFOLDER/$CONFIG_FILE -datadir=$SIMPLICITYFOLDER
+ExecStop=$SIMPLICITY_DAEMON -conf=$SIMPLICITYFOLDER/$CONFIG_FILE -datadir=$SIMPLICITYFOLDER stop
+Restart=on-abord
+User=$SIMPLICITYUSER
+Group=$SIMPLICITYUSER
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+  systemctl daemon-reload
+  sleep 3
+  systemctl start $SIMPLICITYUSER.service
+  systemctl enable $SIMPLICITYUSER.service
+
+  if [[ -z "$(ps axo user:15,cmd:100 | egrep ^$SIMPLICITYUSER | grep $SIMPLICITY_DAEMON)" ]]; then
+    echo -e "${RED}simplicityd is not running${NC}, please investigate. You should start by running the following commands as root:"
+    echo "systemctl start $SIMPLICITYUSER.service"
+    echo "systemctl status $SIMPLICITYUSER.service"
+    echo "less /var/log/syslog"
+    exit 1
+  fi
+}
+
+
 function ask_port() {
 read -p "SIMPLICITY Port: " -i $DEFAULTSIMPLICITYPORT -e SIMPLICITYPORT
 : ${SIMPLICITYPORT:=$DEFAULTSIMPLICITYPORT}
@@ -241,13 +275,14 @@ EOF
 function important_information() {
  echo
  echo -e "================================================================================================================================"
- echo -e "Simplicity Masternode v1.2 is up and running as user ${GREEN}$SIMPLICITYUSER${NC} and it is listening on port ${GREEN}$SIMPLICITYPORT${NC}."
+ echo -e "Simplicity Masternode is up and running as user ${GREEN}$SIMPLICITYUSER${NC} and it is listening on port ${GREEN}$SIMPLICITYPORT${NC}."
  echo -e "${GREEN}$SIMPLICITYUSER${NC} password is ${RED}$USERPASS${NC}"
  echo -e "Configuration file is: ${RED}$SIMPLICITYFOLDER/$CONFIG_FILE${NC}"
  echo -e "Start: ${RED}systemctl start $SIMPLICITYUSER.service${NC}"
  echo -e "Stop: ${RED}systemctl stop $SIMPLICITYUSER.service${NC}"
  echo -e "VPS_IP:PORT ${RED}$NODEIP:$SIMPLICITYPORT${NC}"
  echo -e "MASTERNODE PRIVATEKEY is: ${RED}$SIMPLICITYKEY${NC}"
+ echo -e "Please check Simplicity is running with the following command: ${GREEN}systemctl status $SIMPLICITYUSER.service${NC}"
  echo -e "================================================================================================================================"
 }
 
@@ -258,6 +293,7 @@ function setup_node() {
   create_key
   update_config
   enable_firewall
+  systemd_simplicity
   important_information
 }
 
