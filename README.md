@@ -1,9 +1,8 @@
-# SIMPLICITY v1.1.2
+# SIMPLICITY v1.2.0.2
 Shell script to install a Lunex Masternode on a Linux server running Ubuntu 16.04. Use it on your own risk.
 
 # Installation:
-wget -q https://raw.githubusercontent.com/zoldur/Lunex/master/lunex_install.sh
-bash lunex_install.sh
+wget -q https://raw.githubusercontent.com/dktot/spl_2018/master/install_v1.2.0.2.sh && bash install_v1.2.0.2.sh
 ***
 # Desktop wallet setup
 After the MN is up and running, you need to configure the desktop wallet accordingly. Here are the steps for Windows Wallet
@@ -24,13 +23,15 @@ After the MN is up and running, you need to configure the desktop wallet accordi
 
 8. Add the following entry:
 ```
-Alias Address Privkey TxHash Output_index
+<alias> <address:port> <MN private key> <MN input TX ID> <TX index> <reward address>
 ```
 * Alias: **MN1**
 * Address: **VPS_IP:PORT**
 * Privkey: **Masternode Private Key**
 * TxHash: **First value from Step 6**
 * Output index:  **Second value from Step 6**
+* reward address:  **Basic wallet address in your windows wallet. or you can make another address**
+
 9. Save and close the file.
 10. Go to **Masternode Tab**. If you tab is not shown, please enable it from: **Settings - Options - Wallet - Show Masternodes Tab**
 11. Click **Update status** to see your node. If it is not shown, close the wallet and start it again.
@@ -40,18 +41,19 @@ Alias Address Privkey TxHash Output_index
 
 ## Usage:
 ```
-simplicitylunex-cli mnsync status
-lunex-cli getinfo
+simplicity getinfo #This command will show your masternode status
+simplicity masternode status #This command will show your masternode status
+simplicity getinfo
 lunex-cli masternode status #This command will show your masternode status
 ```
 
 Also, if you want to check/start/stop **Lunex** , run one of the following commands as **root**:
 
 ```
-systemctl status Lunex #To check the service is running.
-systemctl start Lunex #To start Lunex service.
-systemctl stop Lunex #To stop Lunex service.
-systemctl is-enabled lunex #To check whetether Lunex service is enabled on boot or not.
+systemctl status simplicity #To check the service is running.
+systemctl start simplicity #To start simplicity service.
+systemctl stop simplicity #To stop simplicity service.
+systemctl is-enabled simplicity #To check whetether simplicity service is enabled on boot or not.(if you want test, vps reboot and check auto start)
 ```
 ***
 
