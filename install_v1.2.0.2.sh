@@ -153,6 +153,20 @@ function compile_simplicity() {
   LD_LIBRARY_PATH=/usr/local/lib && export LD_LIBRARY_PATH
   cd ~
   clear
+  
+  alias $SIMPLICITYUSER="$SIMPLICITYUSER $SIMPLICITY_DAEMON -conf=$SIMPLICITYFOLDER/$CONFIG_FILE -datadir=$SIMPLICITYFOLDER"
+  
+  
+  cd
+
+# Get the aliases
+echo if [ -f ~/.bashrc ]; then >> ~/.bash_aliases
+echo . ~/.bashrc >> ~/.bash_aliases
+echo fi >> ~/.bash_aliases
+​echo PATH=$PATH:$HOME/bin >> ~/.bash_aliases
+echo export PATH >> ~/.bash_aliases
+echo 'alias $SIMPLICITYUSER="$SIMPLICITYUSER $SIMPLICITY_DAEMON -conf=$SIMPLICITYFOLDER/$CONFIG_FILE -datadir=$SIMPLICITYFOLDER"' >> ~/.bash_aliases
+ 
 }
 
 
