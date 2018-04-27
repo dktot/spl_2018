@@ -41,19 +41,33 @@ After the MN is up and running, you need to configure the desktop wallet accordi
 
 ## Usage:
 ```
-simplicity getinfo #This command will show your masternode status
-simplicity masternode status #This command will show your masternode status
-simplicity getinfo
-lunex-cli masternode status #This command will show your masternode status
+USERNAME getinfo #This command will show your masternode status
+USERNAME masternode status #This command will show your masternode status
+USERNAME masternode list | grep IP ADDRESS
+
+if your USERNAME is simplicity1 (or simplicity2, simplicity3, simplicity4 ~)
+ex
+simplicity1 getinfo #This command will show your masternode status
+simplicity1 masternode status #This command will show your masternode status
+simplicity1 masternode list | grep IP ADDRESS
 ```
 
-Also, if you want to check/start/stop **Lunex** , run one of the following commands as **root**:
+Also, if you want to check/start/stop **simplicity** , run one of the following commands as **root**:
 
 ```
-systemctl status simplicity #To check the service is running.
-systemctl start simplicity #To start simplicity service.
-systemctl stop simplicity #To stop simplicity service.
-systemctl is-enabled simplicity #To check whetether simplicity service is enabled on boot or not.(if you want test, vps reboot and check auto start)
+systemctl status USERNAME #To check the service is running.
+systemctl start USERNAME #To start simplicity service.
+systemctl stop USERNAME #To stop simplicity service.
+systemctl is-enabled USERNAME #To check whetether simplicity service is enabled on boot or not.(if you want test, vps reboot and check auto start)
+
+if your USERNAME is simplicity1 (or simplicity2, simplicity3, simplicity4 ~)
+ex
+
+systemctl status simplicity1
+systemctl start simplicity1
+systemctl stop simplicity1
+systemctl is-enabled simplicity1
+
 ```
 ***
 
