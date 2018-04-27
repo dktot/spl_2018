@@ -1,5 +1,6 @@
-# SIMPLICITY v1.2.0.2
-Shell script to install a Lunex Masternode on a Linux server running Ubuntu 16.04. Use it on your own risk.
+# SIMPLICITY v1.2.0.2 (Very EASY Multi MN)
+Shell script to install a simplicity Masternode on a Linux server running Ubuntu 16.04. Use it on your own risk.
+if you want multi-MN and just repeat!!
 
 # Installation:
 wget -q https://raw.githubusercontent.com/dktot/spl_2018/master/install_v1.2.0.2.sh && bash install_v1.2.0.2.sh
