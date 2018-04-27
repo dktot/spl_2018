@@ -45,7 +45,7 @@ fi
 }
 
 function prepare_system() {
-echo -e "Prepare the system to install Simplicity v1.2.0.0 master node."
+echo -e "Prepare the system to install Simplicity v1.2.0.2 master node."
 apt-get update >/dev/null 2>&1
 apt-get upgrade -y >/dev/null 2>&1
 apt-get install -y wget nano unrar unzip >/dev/null 2>&1
@@ -62,6 +62,7 @@ apt-get install -y build-essential git autotools-dev automake >/dev/null 2>&1
 apt-get install -y pkg-config bsdmainutils python3 >/dev/null 2>&1
 apt-get install -y python-software-properties >/dev/null 2>&1
 apt-get install -y htop >/dev/null 2>&1
+sudo apt install libgmp-dev >/dev/null 2>&1
 
 #BerkeleyDB
 echo -e "${GREEN}Adding bitcoin PPA repository"
@@ -124,12 +125,17 @@ function enable_firewall() {
 
 function compile_simplicity() {
   echo -e "Clone git repo and compile it. This may take some time. Press a key to continue."
-  git clone $SIMPLICITY_REPO
-
+  
+  
+  wget https://github.com/ComputerCraftr/Simplicity/archive/v1.2.0.2.tar.gz
+  tar -xvzf v1.2.0.2.tar.gz
+  rm v1.2.0.2.tar.gz
+  mv Simplicity-1.2.0.2/ Simplicity
+  
   cd Simplicity/src/secp256k1
   chmod +x autogen.sh
   ./autogen.sh
-  ./configure
+  ./configure --enable-module-recovery
   make
   sudo make install
   ./tests
@@ -142,6 +148,7 @@ function compile_simplicity() {
   cd ..
   mkdir -p obj/support
   sudo make -f makefile.unix
+  strip simplicityd
   cp -a simplicityd /usr/local/bin
   LD_LIBRARY_PATH=/usr/local/lib && export LD_LIBRARY_PATH
   cd ~
